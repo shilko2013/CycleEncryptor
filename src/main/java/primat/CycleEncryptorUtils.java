@@ -27,22 +27,7 @@ public class CycleEncryptorUtils {
         }
     }
 
-    private static int readDistance(PrintStream outputStream, InputStream inputStream) {
-        Scanner in = new Scanner(inputStream);
-        while (true) {
-            try {
-                outputStream.print("Введите кодовое расстояние: ");
-                int distance = in.nextInt();
-                outputStream.println("Кодовое расстояние символов введено.");
-                return distance;
-            } catch (Exception e) {
-                outputStream.println("Ошибка ввода, повторите ввод.");
-                in.nextLine();
-            }
-        }
-    }
-
-    private static int readCombination(PrintStream outputStream, InputStream inputStream, int lenght) {
+    private static String readCombination(PrintStream outputStream, InputStream inputStream, int lenght) {
         Scanner in = new Scanner(inputStream);
         while (true) {
             try {
@@ -52,8 +37,14 @@ public class CycleEncryptorUtils {
                     outputStream.println("Неверная длина комбинации - ожидалось " + lenght + ".");
                     throw new IllegalArgumentException();
                 }
+                if (combination.chars()
+                        .filter(code -> (char) code != '0' && (char) code != '1')
+                        .count() != 0) {
+                    outputStream.println("Комбинация может состоять только из нулей и едениц.");
+                    throw new IllegalArgumentException();
+                }
                 outputStream.println("Комбинация введена.");
-                return Integer.parseInt(combination, 2);
+                return combination;
             } catch (Exception e) {
                 outputStream.println("Ошибка ввода, повторите ввод.");
                 in.nextLine();
@@ -65,8 +56,8 @@ public class CycleEncryptorUtils {
         printHeader(System.out);
         while (true) {
             int count = readCount(System.out, System.in);
-            int combination = readCombination(System.out, System.in, count);
-            CycleEncryptor cycleEncryptor = new CycleEncryptor(count, readDistance(System.out, System.in));
+            String combination = readCombination(System.out, System.in, count);
+            CycleEncryptor cycleEncryptor = new CycleEncryptor(count);
             System.out.println(cycleEncryptor.decode(combination));
             System.out.println();
         }
