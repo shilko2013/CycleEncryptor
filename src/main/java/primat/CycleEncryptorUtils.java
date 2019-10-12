@@ -18,6 +18,10 @@ public class CycleEncryptorUtils {
             try {
                 outputStream.print("Введите количество информационных символов: ");
                 int count = in.nextInt();
+                if (count < 1 || count > 511) {
+                    outputStream.println("Количество информационных символов должно быть от 1 до 511.");
+                    throw new IllegalArgumentException();
+                }
                 outputStream.println("Количество информационных символов введено.");
                 return count;
             } catch (Exception e) {
@@ -58,7 +62,11 @@ public class CycleEncryptorUtils {
             int count = readCount(System.out, System.in);
             String combination = readCombination(System.out, System.in, count);
             CycleEncryptor cycleEncryptor = new CycleEncryptor(count);
-            System.out.println(cycleEncryptor.decode(combination));
+            try {
+                System.out.println(cycleEncryptor.decode(combination));
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
             System.out.println();
         }
     }
