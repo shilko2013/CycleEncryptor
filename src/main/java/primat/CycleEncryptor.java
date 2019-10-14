@@ -30,7 +30,7 @@ public class CycleEncryptor {
         int numberCombination = Integer.parseInt(combination, 2);
         int remainder = numberCombination % polynomial;
         int countShift;
-        for (countShift = 0; remainder > 1; ++countShift) {
+        for (countShift = 0; Integer.toBinaryString(remainder).chars().filter(c -> c == '1').count() > 1; ++countShift) {
             numberCombination = leftShift(numberCombination);
             remainder = numberCombination % polynomial;
             if (countShift > combination.length())
